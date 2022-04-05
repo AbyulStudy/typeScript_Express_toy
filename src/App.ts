@@ -7,6 +7,7 @@ import cors from 'cors';
 
 // Router
 import UserRouter from './routers/UserRoutes';
+import AuthRoutes from './routers/AuthRoutes';
 
 class App {
   public app: Application;
@@ -32,6 +33,7 @@ class App {
       res.send('hello ts');
     });
     this.app.use('/api/v1/users', UserRouter);
+    this.app.use('/api/v1/auth', AuthRoutes);
   }
 }
 

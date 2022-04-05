@@ -1,12 +1,21 @@
 import { Request, Response } from 'express';
-import IController from './ControllersInterface';
+import PasswordHash from '../utils/PasswordHash';
+const db = require('../db/models');
 
 class AuthController {
-  index(req: Request, res: Response): Response {
-    throw new Error('Method not implemented.');
-  }
-  create(req: Request, res: Response): Response {
-    throw new Error('Method not implemented.');
+  register = async (req: Request, res: Response): Promise<Response> => {
+    let { username, password } = req.body;
+    const hashPassword: string = await PasswordHash.hash(password);
+
+    await db.user.create({
+      username,
+      password: hashPassword,
+    });
+
+    return res.send('regist success');
+  };
+  login(req: Request, res: Response): Response {
+    return res.status(200);
   }
 }
 export default new AuthController();

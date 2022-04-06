@@ -39,7 +39,7 @@ class AuthController {
       return res.send({ token });
     }
 
-    return res.send('fal');
+    return res.send('auth failed');
   };
 }
 export default new AuthController();

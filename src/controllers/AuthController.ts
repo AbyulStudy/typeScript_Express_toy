@@ -15,31 +15,33 @@ class AuthController {
 
     return res.send('regist success');
   };
-  login = async (req: Request, res: Response): Promise<Response> => {
+  login = async (req: Request, res: Response) => {
     let { username, password } = req.body;
-
+    let searchUser, compare, token;
     //search data user by username
-    const searchUser = await db.user.findOne({
-      where: { username },
-    });
+    try {
+      searchUser = await db.user.findOne({
+        where: { username },
+      });
 
-    // check password
-    let compare = await Authentication.passwordCompare(
-      password,
-      searchUser.password
-    );
-    // generate token
-    if (compare) {
-      let token = Authentication.generateToken(
-        searchUser.id,
-        searchUser.username,
+      // check password
+      compare = await Authentication.passwordCompare(
+        password,
         searchUser.password
       );
+      // generate token
+      if (compare) {
+        token = Authentication.generateToken(
+          searchUser.id,
+          searchUser.username,
+          searchUser.password
+        );
 
-      return res.send({ token });
+        return res.send({ token });
+      }
+    } catch (error) {
+      return res.send('auth failed');
     }
-
-    return res.send('auth failed');
   };
 
   profile = async (req: Request, res: Response): Promise<Response> => {
